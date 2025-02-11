@@ -5,6 +5,7 @@ import com.task.Task_ManagementServer.enums.UserRole;
 import com.task.Task_ManagementServer.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,6 +23,9 @@ public class AuthServiceImpl implements AuthService{
             User user = new User();
             user.setEmail("admin@test.com");
             user.setName("admin");
+            userRepository.save(user);
+            user.setPassword(new BCryptPasswordEncoder().encode("admin"));//hash the password
+            user.setUserRole(UserRole.ADMIN);
             userRepository.save(user);
             System.out.println("Admin account created successfully");
         }else{

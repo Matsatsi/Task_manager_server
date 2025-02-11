@@ -9,5 +9,5 @@ public interface UserService {
 
     UserDetailsService userDetailsService();
 
-    UserDetails loadUserByUsername(String userEmail);
+
 }
