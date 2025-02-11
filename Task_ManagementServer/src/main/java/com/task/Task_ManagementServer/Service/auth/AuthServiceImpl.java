@@ -1,5 +1,7 @@
 package com.task.Task_ManagementServer.Service.auth;
 
+import com.task.Task_ManagementServer.dto.SignUpRequest;
+import com.task.Task_ManagementServer.dto.UserDto;
 import com.task.Task_ManagementServer.entities.User;
 import com.task.Task_ManagementServer.enums.UserRole;
 import com.task.Task_ManagementServer.repositories.UserRepository;
@@ -11,10 +13,14 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
 
     private final UserRepository userRepository;
+
+    public AuthServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostConstruct
     public  void  createAdminAccount(){
@@ -32,5 +38,24 @@ public class AuthServiceImpl implements AuthService{
             System.out.println("Admin account already exists");
         }
 
+    }
+
+    @Override
+    public UserDto signUpUser(SignUpRequest signUpRequest) {
+
+        User user = new User();
+        user.setEmail(signUpRequest.getEmail());
+        user.setName(signUpRequest.getName());
+        user.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getPassword()));
+        user.setUserRole(UserRole.EMPLOYEE);
+        User createUser =userRepository.save(user);
+
+        return  createUser.getUserDto();
+
+    }
+
+    @Override
+    public boolean hasUserEmail(String email) {
+        return userRepository.findFirstByEmail(email).isPresent();
     }
 }

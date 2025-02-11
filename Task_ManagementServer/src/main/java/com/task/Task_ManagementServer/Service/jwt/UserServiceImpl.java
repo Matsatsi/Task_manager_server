@@ -11,12 +11,16 @@ import org.springframework.stereotype.Service;
 //helps with login Authentication
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 //Automatically creates a constructor for userRepository.
 public class UserServiceImpl implements UserService{
 //UserDetailsService: A built-in Spring Security interface to load user details.
 
     private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetailsService userDetailsService() {
